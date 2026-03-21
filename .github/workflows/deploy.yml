@@ -13,16 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Debug SSH connection
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          debug: true
-          script: |
-            echo "Connected as $(whoami) on $(hostname)"
-
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:

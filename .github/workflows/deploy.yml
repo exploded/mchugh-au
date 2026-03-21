@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "index.html"
+          target: "/tmp/mchugh-au-deploy"
+          overwrite: true
+
+      - name: Install to web root
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            sudo mkdir -p /var/www/mchugh.au
+            sudo cp /tmp/mchugh-au-deploy/index.html /var/www/mchugh.au/
+            sudo chown -R www-data:www-data /var/www/mchugh.au
+            rm -rf /tmp/mchugh-au-deploy

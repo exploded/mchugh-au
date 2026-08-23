@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || '22' }}
-          source: "index.html"
+          source: "index.html,assets/,favicon.ico,favicon-16x16.png,favicon-32x32.png,favicon-48x48.png,apple-touch-icon.png,android-chrome-192x192.png,android-chrome-512x512.png,scripts/deploy-mchugh-au"
           target: "/tmp/mchugh-au-deploy"
           overwrite: true
 
@@ -31,8 +31,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || '22' }}
-          script: |
-            sudo mkdir -p /var/www/mchugh.au
-            sudo cp /tmp/mchugh-au-deploy/index.html /var/www/mchugh.au/
-            sudo chown -R www-data:www-data /var/www/mchugh.au
-            rm -rf /tmp/mchugh-au-deploy
+          # Without this the step returns the exit code of the LAST command only,
+          # which is how a fully-failed deploy reported success on 2026-08-23.
+          script_stops: true
+          script: sudo /usr/local/bin/deploy-mchugh-au /tmp/mchugh-au-deploy

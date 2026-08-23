@@ -3,100 +3,1033 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mchugh.au</title>
+    <title>mchugh.au — Workshop</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@500&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #1a1816;
+            --text: #ece4d2;
+            --text-dim: #8a8378;
+            --rule: rgba(236, 228, 210, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            background-image:
+                radial-gradient(ellipse at top, rgba(60, 50, 40, 0.4), transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(40, 30, 20, 0.3), transparent 60%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 4vw, 4rem);
+        }
+
+        .top-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding-bottom: 0.9rem;
+            border-bottom: 1px solid var(--rule);
         }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            padding: 2rem;
+        .top-bar .mark {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.05rem;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--text);
         }
-        h1 {
-            font-size: 2rem;
+
+        .hero {
+            padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3.5rem);
+            display: grid;
+            gap: 1.25rem;
+        }
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-variation-settings: "opsz" 144, "SOFT" 50;
             font-weight: 300;
-            margin-bottom: 2rem;
-            color: #f8fafc;
+            font-size: clamp(2.8rem, 9vw, 6rem);
+            line-height: 0.95;
+            letter-spacing: -0.035em;
+            color: var(--text);
         }
-        .links {
+        .hero h1 em { font-style: italic; font-weight: 300; }
+        .hero .lede {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+            line-height: 1.45;
+            color: var(--text-dim);
+            max-width: 48ch;
+        }
+
+        /* Bento grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: dense;
+            gap: clamp(0.75rem, 1.4vw, 1.25rem);
+        }
+
+        /* Common card */
+        .card {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            justify-content: space-between;
+            padding: clamp(1.1rem, 1.6vw, 1.5rem);
+            isolation: isolate;
+            transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
         }
-        a {
-            display: block;
-            padding: 1rem 1.25rem;
-            background: #1e293b;
-            border-radius: 0.5rem;
-            color: #e2e8f0;
-            text-decoration: none;
-            transition: background 0.15s;
+        .card:focus-visible {
+            outline: 2px solid var(--text);
+            outline-offset: 3px;
         }
-        a:hover { background: #334155; }
-        .label {
-            font-size: 1.1rem;
+        .card:hover { transform: translateY(-3px); }
+
+        .card .tag {
+            font-size: 0.62rem;
             font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            opacity: 0.85;
         }
-        .desc {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-top: 0.25rem;
+        .card .name {
+            font-family: 'Fraunces', serif;
+            font-variation-settings: "opsz" 96;
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+        }
+        .card .url {
+            font-size: 0.7rem;
+            letter-spacing: 0.04em;
+            opacity: 0.6;
+        }
+
+        .card .head { position: relative; z-index: 2; }
+        .card .body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Photo backgrounds — common */
+        .photo-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+        }
+        .card:hover .photo-bg { transform: scale(1.04); }
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ── Card 1: Astrophotography (2×2, full-bleed nebula) ── */
+        .c-astro {
+            grid-column: span 2;
+            grid-row: span 2;
+            background: #060814;
+            color: #f0eee8;
+            min-height: 400px;
+        }
+        .c-astro .photo-bg {
+            background-image: url("assets/astro-eta-carinae.jpg");
+        }
+        .c-astro .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(6, 8, 20, 0.5) 0%,
+                    rgba(6, 8, 20, 0.05) 30%,
+                    rgba(6, 8, 20, 0.05) 60%,
+                    rgba(6, 8, 20, 0.85) 100%);
+        }
+        .c-astro .name {
+            font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+            max-width: 14ch;
+            color: #fff;
+        }
+        .c-astro .tag { color: #d4a574; }
+        .c-astro .url { color: rgba(240, 238, 232, 0.7); }
+
+        /* ── Card 2: Train (1×2 tall, gym photo) ─────────────── */
+        .c-train {
+            grid-column: span 1;
+            grid-row: span 2;
+            background: #1a1614;
+            color: #f0e8d8;
+            min-height: 400px;
+        }
+        .c-train .photo-bg {
+            background-image: url("assets/train-deadlift.jpg");
+            background-position: center 35%;
+        }
+        .c-train .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(20, 18, 16, 0.4) 0%,
+                    rgba(20, 18, 16, 0.05) 25%,
+                    rgba(20, 18, 16, 0.1) 55%,
+                    rgba(20, 18, 16, 0.92) 100%);
+        }
+        .c-train .name {
+            font-size: clamp(1.25rem, 1.9vw, 1.5rem);
+            max-width: 12ch;
+            color: #fff;
+        }
+        .c-train .tag { color: #e0a070; }
+        .c-train .url { color: rgba(240, 232, 216, 0.6); }
+
+        /* ── Card 3: Aliens (1×1, acid green, glitch) ─────────── */
+        .c-aliens {
+            background: #050a05;
+            color: #9eff5a;
+        }
+        .c-aliens .name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 0.95rem;
+            line-height: 1.25;
+            letter-spacing: 0;
+            color: #9eff5a;
+            text-shadow: 0 0 6px rgba(158, 255, 90, 0.4);
+            transition: text-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .c-aliens:hover .name {
+            transform: skewX(-2deg);
+            text-shadow:
+                1.5px 0 #ff3366,
+                -1.5px 0 #00d4ff,
+                0 0 8px rgba(158, 255, 90, 0.6);
+        }
+        .c-aliens .tag { color: rgba(158, 255, 90, 0.55); }
+        .c-aliens .url { color: rgba(158, 255, 90, 0.4); }
+        .c-aliens::before {
+            content: "> _";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.7rem;
+            color: rgba(158, 255, 90, 0.4);
+            animation: blink 1.4s steps(2, end) infinite;
+            z-index: 2;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ── Card 4: A-Part Real Estate (2×1, split text+photo) ── */
+        .c-estate {
+            grid-column: span 2;
+            background: #d4c8a8;
+            color: #2a1f12;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            gap: 0;
+            padding: 0;
+            min-height: 200px;
+        }
+        .c-estate .text {
+            padding: clamp(1.1rem, 1.6vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        .c-estate .photo {
+            position: relative;
+            background-image: url("assets/apart-house.jpg");
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+        }
+        .c-estate:hover .photo { transform: scale(1.04); }
+        .c-estate::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(90deg, rgba(42, 31, 18, 0.06) 1px, transparent 1px),
+                linear-gradient(rgba(42, 31, 18, 0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .c-estate .name {
+            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+            max-width: 14ch;
+        }
+        .c-estate .tag { color: #6b4d2a; }
+        .c-estate .url { color: rgba(42, 31, 18, 0.55); }
+
+        /* ── Card 5: SpeakEasy (1×1, cafe photo) ─────────────── */
+        .c-speak {
+            background: #2a1f16;
+            color: #f4e8d4;
+        }
+        .c-speak .photo-bg {
+            background-image: url("assets/speakeasy-cafe.jpg");
+            background-position: center;
+        }
+        .c-speak .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(42, 31, 22, 0.25) 0%,
+                    rgba(42, 31, 22, 0.05) 35%,
+                    rgba(20, 14, 8, 0.92) 100%);
+        }
+        .c-speak .name {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 11ch;
+            color: #fff;
+        }
+        .c-speak .tag { color: #e0a878; }
+        .c-speak .url { color: rgba(244, 232, 212, 0.6); }
+
+        /* ── Card 6: WtW (2×1, deep red w/ poster fan) ───────── */
+        .c-wtw {
+            grid-column: span 2;
+            background: #4a0e10;
+            color: #f4e8d8;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            padding: 0;
+            min-height: 220px;
+            overflow: hidden;
+        }
+        .c-wtw .text {
+            padding: clamp(1.1rem, 1.6vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        .c-wtw .posters {
+            position: relative;
+            overflow: hidden;
+        }
+        .c-wtw .posters img {
+            position: absolute;
+            height: 130%;
+            top: -15%;
+            border-radius: 4px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+            transition: transform 0.6s cubic-bezier(.2,.7,.2,1);
+        }
+        .c-wtw .posters img:nth-child(1) { left: -8%;  transform: rotate(-9deg); z-index: 1; }
+        .c-wtw .posters img:nth-child(2) { left: 14%;  transform: rotate(-3deg); z-index: 2; }
+        .c-wtw .posters img:nth-child(3) { left: 36%;  transform: rotate(2deg);  z-index: 3; }
+        .c-wtw .posters img:nth-child(4) { left: 58%;  transform: rotate(7deg);  z-index: 2; }
+        .c-wtw .posters img:nth-child(5) { left: 80%;  transform: rotate(11deg); z-index: 1; }
+        .c-wtw:hover .posters img:nth-child(1) { transform: rotate(-12deg) translateY(-3px); }
+        .c-wtw:hover .posters img:nth-child(2) { transform: rotate(-5deg) translateY(-3px); }
+        .c-wtw:hover .posters img:nth-child(3) { transform: rotate(0deg) translateY(-3px); }
+        .c-wtw:hover .posters img:nth-child(4) { transform: rotate(5deg) translateY(-3px); }
+        .c-wtw:hover .posters img:nth-child(5) { transform: rotate(13deg) translateY(-3px); }
+        .c-wtw::after {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0; left: 36%; right: 0;
+            background: linear-gradient(90deg, rgba(74, 14, 16, 0.7), transparent 30%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .c-wtw .name {
+            font-size: clamp(1.4rem, 2.4vw, 2rem);
+            max-width: 12ch;
+        }
+        .c-wtw .tag { color: #d4815a; }
+        .c-wtw .url { color: rgba(244, 232, 216, 0.5); }
+
+        /* ── Card 7: Game (1×1, trading desk photo) ─────────── */
+        .c-game {
+            background: #0a1018;
+            color: #e8eef0;
+            overflow: hidden;
+        }
+        .c-game .photo-bg {
+            background-image: url("assets/game-trading.jpg");
+            background-position: center;
+        }
+        .c-game .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(10, 16, 24, 0.3) 0%,
+                    rgba(10, 16, 24, 0.05) 35%,
+                    rgba(5, 10, 16, 0.92) 100%);
+        }
+        .c-game::after {
+            content: "▲ +12.4%";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #6dd99c;
+            text-shadow: 0 0 8px rgba(109, 217, 156, 0.5);
+            z-index: 2;
+        }
+        .c-game .name {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 11ch;
+            color: #fff;
+        }
+        .c-game .tag { color: #6dd99c; }
+        .c-game .url { color: rgba(232, 238, 240, 0.6); }
+
+        /* ── Card 8: Paintings (2×2, three framed paintings) ── */
+        .c-paint {
+            grid-column: span 2;
+            grid-row: span 2;
+            background: #ece4d2;
+            color: #2a1614;
+            min-height: 400px;
+            overflow: hidden;
+        }
+        .c-paint::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 100% 100% at 50% 50%,
+                    rgba(252, 246, 232, 0.9) 0%,
+                    rgba(218, 200, 170, 0.4) 70%,
+                    rgba(180, 150, 110, 0.3) 100%);
+            z-index: 0;
+        }
+        .c-paint::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='2' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+            mix-blend-mode: multiply;
+            opacity: 0.12;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .c-paint .gallery {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+        .c-paint .frame {
+            position: absolute;
+            border: 6px solid #faf4e6;
+            outline: 1px solid #5a4630;
+            box-shadow: 0 12px 32px rgba(60, 40, 20, 0.35), 0 4px 8px rgba(60, 40, 20, 0.2);
+            background: #2a1614;
+            transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+        }
+        .c-paint .frame img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .c-paint .frame.f1 {
+            top: 14%;
+            left: 8%;
+            width: 28%;
+            aspect-ratio: 4 / 5;
+            transform: rotate(-5deg);
+            z-index: 2;
+        }
+        .c-paint .frame.f2 {
+            top: 22%;
+            right: 12%;
+            width: 32%;
+            aspect-ratio: 4 / 3;
+            transform: rotate(4deg);
+            z-index: 3;
+        }
+        .c-paint .frame.f3 {
+            top: 50%;
+            left: 32%;
+            width: 30%;
+            aspect-ratio: 5 / 4;
+            transform: rotate(-2deg);
+            z-index: 4;
+        }
+        .c-paint:hover .frame.f1 { transform: rotate(-3deg) translateY(-6px); }
+        .c-paint:hover .frame.f2 { transform: rotate(2deg) translateY(-6px); }
+        .c-paint:hover .frame.f3 { transform: rotate(-1deg) translateY(-6px); }
+        .c-paint .body {
+            background: rgba(252, 246, 232, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            margin: -0.3rem -0.4rem;
+            align-self: flex-start;
+            max-width: fit-content;
+        }
+        .c-paint .head {
+            background: rgba(252, 246, 232, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            align-self: flex-start;
+            max-width: fit-content;
+        }
+        .c-paint .name {
+            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+            max-width: 14ch;
+        }
+        .c-paint .tag { color: #7a1f2b; }
+        .c-paint .url { color: rgba(42, 22, 20, 0.55); }
+
+        /* ── Card 9: Moon (1×2 tall, navy w/ moon+skyline SVG) ── */
+        .c-moon {
+            grid-column: span 1;
+            grid-row: span 2;
+            background: linear-gradient(180deg, #061128 0%, #0a1f3a 60%, #050a18 100%);
+            color: #e0e8f4;
+            min-height: 400px;
+            overflow: hidden;
+        }
+        .c-moon .illus {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+        }
+        .c-moon .illus svg { width: 100%; height: 100%; }
+        .c-moon:hover .moon-orb { transform: translate(2%, -2%); }
+        .moon-orb { transition: transform 0.7s cubic-bezier(.2,.7,.2,1); transform-origin: center; transform-box: fill-box; }
+        .c-moon .name {
+            font-size: clamp(1.25rem, 1.9vw, 1.5rem);
+            max-width: 10ch;
+        }
+        .c-moon .tag { color: #d4c8a8; }
+        .c-moon .url { color: rgba(224, 232, 244, 0.5); }
+
+        /* ── Card 10: SoA (3-wide banner, clinical white) ──── */
+        .c-soa {
+            grid-column: span 3;
+            background: #fafaf6;
+            color: #1a1612;
+            min-height: 130px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.4rem 1.8rem;
+        }
+        .c-soa .doc-illus {
+            width: 96px;
+            height: 110px;
+            flex-shrink: 0;
+        }
+        .c-soa .doc-illus svg { width: 100%; height: 100%; }
+        .c-soa::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 0 22px 22px 0;
+            border-color: transparent #ece4d2 transparent transparent;
+            transition: border-width 0.4s ease;
+        }
+        .c-soa:hover::after { border-width: 0 30px 30px 0; }
+        .c-soa .body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .c-soa .name {
+            font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+            max-width: none;
+        }
+        .c-soa .tag { color: #4a5868; }
+        .c-soa .url { color: rgba(26, 22, 18, 0.5); }
+        .c-soa .arrow {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: #1a1612;
+            opacity: 0.7;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .c-soa:hover .arrow { transform: translateX(4px); opacity: 1; }
+
+        /* ── Card 11: Catoggio (1×1, photo of house w/ overlay) ── */
+        .c-cat {
+            background: #1a2418;
+            color: #f0eee8;
+        }
+        .c-cat .photo-bg {
+            background-image: url("assets/catoggio-house.jpg");
+        }
+        .c-cat .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(20, 30, 16, 0.35) 0%,
+                    rgba(20, 30, 16, 0.05) 30%,
+                    rgba(10, 20, 10, 0.9) 100%);
+        }
+        .c-cat .name {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 11ch;
+            color: #fff;
+        }
+        .c-cat .tag { color: #c4d4a0; }
+        .c-cat .url { color: rgba(240, 238, 232, 0.6); }
+
+        /* ── Card 12: Primordial Egypt (1×1, photo) ────────── */
+        .c-egypt {
+            background: #2a1f12;
+            color: #f8e8d0;
+        }
+        .c-egypt .photo-bg {
+            background-image: url("assets/egypt-sphinx.jpg");
+            background-position: center;
+        }
+        .c-egypt .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(42, 31, 18, 0.25) 0%,
+                    rgba(42, 31, 18, 0.05) 30%,
+                    rgba(20, 14, 6, 0.92) 100%);
+        }
+        .c-egypt .name {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 12ch;
+            color: #fff;
+        }
+        .c-egypt .tag { color: #e0a868; }
+        .c-egypt .url { color: rgba(248, 232, 208, 0.6); }
+
+        /* ── Card 13: ClearSky (1×1, twilight gradient + stars) ── */
+        .c-sky {
+            grid-column: span 1;
+            background: linear-gradient(180deg, #0a1a3a 0%, #14406a 55%, #2a7ba0 100%);
+            color: #eaf4fb;
+            overflow: hidden;
+        }
+        .c-sky .illus {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .c-sky .illus svg { width: 100%; height: 100%; }
+        .c-sky:hover .sky-sun { transform: translateY(-4px); }
+        .sky-sun { transition: transform 0.7s cubic-bezier(.2,.7,.2,1); transform-origin: center; transform-box: fill-box; }
+        .c-sky .photo-overlay {
+            background:
+                linear-gradient(180deg,
+                    rgba(10, 26, 58, 0.15) 0%,
+                    rgba(10, 26, 58, 0.05) 40%,
+                    rgba(6, 16, 36, 0.85) 100%);
+        }
+        .c-sky .name {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 11ch;
+            color: #fff;
+        }
+        .c-sky .tag { color: #a8d4ec; }
+        .c-sky .url { color: rgba(234, 244, 251, 0.65); }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid var(--rule);
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+        .footer .ornament {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 1rem;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--text-dim);
+        }
+
+        /* Tablet */
+        @media (max-width: 980px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .c-astro, .c-paint { grid-column: span 2; grid-row: span 2; }
+            .c-train, .c-moon { grid-column: span 1; grid-row: span 2; }
+            .c-estate, .c-wtw { grid-column: span 2; grid-row: span 1; }
+            .c-soa, .c-egypt { grid-column: span 2; }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .card,
+            .c-astro, .c-paint, .c-train, .c-moon,
+            .c-estate, .c-wtw, .c-soa {
+                grid-column: span 1 !important;
+                grid-row: span 1 !important;
+                min-height: 200px;
+            }
+            .c-astro, .c-paint { min-height: 280px; }
+            .c-train, .c-moon { min-height: 240px; }
+            .c-estate { grid-template-columns: 1fr; grid-template-rows: auto 140px; }
+            .c-wtw { grid-template-columns: 1fr; grid-template-rows: auto 160px; }
+            .c-wtw::after { display: none; }
+            .c-soa {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            .c-soa .arrow, .c-soa .doc-illus { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>mchugh.au</h1>
-        <div class="links">
-            <a href="https://moon.mchugh.au">
-                <div class="label">Moon Rise &amp; Set</div>
-                <div class="desc">moon.mchugh.au</div>
+    <div class="page">
+        <header class="top-bar">
+            <span class="mark"><em>mchugh.au</em></span>
+            <span>Workshop · Vol. I</span>
+        </header>
+
+        <section class="hero">
+            <h1>Things <em>made</em>, kept here so they don't drift apart.</h1>
+            <p class="lede">Thirteen side projects, paintings, and quiet experiments.</p>
+        </section>
+
+        <div class="grid">
+            <!-- 1. Astrophotography (2×2) -->
+            <a class="card c-astro" href="https://deepspaceplace.com">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Astronomy / 01</span></div>
+                <div class="body">
+                    <h2 class="name">My astrophotography site</h2>
+                    <p class="url">deepspaceplace.com</p>
+                </div>
             </a>
-            <a href="https://alien.mchugh.au">
-                <div class="label">Alien</div>
-                <div class="desc">alien.mchugh.au</div>
+
+            <!-- 2. Train (1×2) -->
+            <a class="card c-train" href="https://train.mchugh.au">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Fitness / 02</span></div>
+                <div class="body">
+                    <h2 class="name">Weight training app for the gym</h2>
+                    <p class="url">train.mchugh.au</p>
+                </div>
             </a>
-            <a href="https://speakeasy.mchugh.au">
-                <div class="label">SpeakEasy Language Tutor</div>
-                <div class="desc">speakeasy.mchugh.au</div>
+
+            <!-- 3. Aliens (1×1) -->
+            <a class="card c-aliens" href="https://alien.mchugh.au">
+                <div class="head"><span class="tag">Speculation / 03</span></div>
+                <div class="body">
+                    <h2 class="name">What are aliens really like?</h2>
+                    <p class="url">alien.mchugh.au</p>
+                </div>
             </a>
-            <a href="https://soa.mchugh.au">
-                <div class="label">Statement of Advice Generator</div>
-                <div class="desc">soa.mchugh.au</div>
+
+            <!-- 9. Moon (1×2) — placed early so dense flow tucks it top-right -->
+            <a class="card c-moon" href="https://moon.mchugh.au">
+                <div class="illus" aria-hidden="true">
+                    <svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                        <!-- stars -->
+                        <g fill="#e0e8f4">
+                            <circle cx="30" cy="40" r="0.8" opacity="0.8"/>
+                            <circle cx="70" cy="22" r="0.6" opacity="0.7"/>
+                            <circle cx="120" cy="50" r="0.9" opacity="0.9"/>
+                            <circle cx="180" cy="28" r="0.7" opacity="0.7"/>
+                            <circle cx="50" cy="80" r="0.5" opacity="0.6"/>
+                            <circle cx="170" cy="100" r="0.7" opacity="0.8"/>
+                            <circle cx="20" cy="150" r="0.6" opacity="0.7"/>
+                            <circle cx="190" cy="170" r="0.5" opacity="0.6"/>
+                        </g>
+                        <!-- moon -->
+                        <g class="moon-orb">
+                            <circle cx="125" cy="100" r="58" fill="#f0e8d4"/>
+                            <!-- crater shading -->
+                            <circle cx="110" cy="85" r="6" fill="rgba(40,30,20,0.12)"/>
+                            <circle cx="140" cy="115" r="4" fill="rgba(40,30,20,0.10)"/>
+                            <circle cx="105" cy="120" r="3" fill="rgba(40,30,20,0.08)"/>
+                            <circle cx="148" cy="80" r="2.5" fill="rgba(40,30,20,0.10)"/>
+                            <circle cx="125" cy="100" r="58" fill="url(#moonShade)"/>
+                        </g>
+                        <defs>
+                            <radialGradient id="moonShade" cx="0.7" cy="0.35" r="0.7">
+                                <stop offset="0%" stop-color="rgba(255,250,235,0.0)"/>
+                                <stop offset="60%" stop-color="rgba(60,40,20,0.0)"/>
+                                <stop offset="100%" stop-color="rgba(20,10,5,0.4)"/>
+                            </radialGradient>
+                        </defs>
+                        <!-- skyline silhouette -->
+                        <g fill="#020812">
+                            <rect x="0" y="290" width="14" height="90"/>
+                            <rect x="14" y="270" width="22" height="110"/>
+                            <rect x="36" y="250" width="18" height="130"/>
+                            <!-- spire -->
+                            <polygon points="56,250 60,238 64,250"/>
+                            <rect x="56" y="250" width="8" height="130"/>
+                            <rect x="64" y="265" width="22" height="115"/>
+                            <rect x="86" y="240" width="28" height="140"/>
+                            <rect x="114" y="260" width="16" height="120"/>
+                            <rect x="130" y="280" width="22" height="100"/>
+                            <rect x="152" y="265" width="20" height="115"/>
+                            <rect x="172" y="285" width="18" height="95"/>
+                            <rect x="190" y="270" width="10" height="110"/>
+                            <!-- windows (warm dots) -->
+                        </g>
+                        <g fill="#d4a574" opacity="0.7">
+                            <rect x="20" y="288" width="2" height="3"/>
+                            <rect x="26" y="295" width="2" height="3"/>
+                            <rect x="42" y="270" width="2" height="3"/>
+                            <rect x="42" y="285" width="2" height="3"/>
+                            <rect x="92" y="260" width="2" height="3"/>
+                            <rect x="98" y="275" width="2" height="3"/>
+                            <rect x="104" y="290" width="2" height="3"/>
+                            <rect x="120" y="280" width="2" height="3"/>
+                            <rect x="158" y="285" width="2" height="3"/>
+                            <rect x="178" y="300" width="2" height="3"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="head"><span class="tag">Lunar / 09</span></div>
+                <div class="body">
+                    <h2 class="name">Moon Rise &amp; Set Times</h2>
+                    <p class="url">moon.mchugh.au</p>
+                </div>
             </a>
-            <a href="https://game.mchugh.au">
-                <div class="label">Fantasy Stock Market Game</div>
-                <div class="desc">game.mchugh.au</div>
+
+            <!-- 4. A-Part Real Estate (2×1) -->
+            <a class="card c-estate" href="https://a-part.com.au">
+                <div class="text">
+                    <span class="tag">Estate / 04</span>
+                    <div class="body">
+                        <h2 class="name">Sell your home with A-Part Real Estate</h2>
+                        <p class="url">a-part.com.au</p>
+                    </div>
+                </div>
+                <div class="photo" aria-hidden="true"></div>
             </a>
-            <a href="https://apart.mchugh.au">
-                <div class="label">A-Part Real Estate</div>
-                <div class="desc">apart.mchugh.au</div>
+
+            <!-- 5. SpeakEasy (1×1) -->
+            <a class="card c-speak" href="https://speakeasy.mchugh.au">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Language / 05</span></div>
+                <div class="body">
+                    <h2 class="name">SpeakEasy Language Tutor</h2>
+                    <p class="url">speakeasy.mchugh.au</p>
+                </div>
             </a>
-            <a href="https://deepspaceplace.com">
-                <div class="label">Deep Space Place</div>
-                <div class="desc">deepspaceplace.com</div>
+
+            <!-- 8. Paintings (2×2) -->
+            <a class="card c-paint" href="https://mchugh.com.au">
+                <div class="gallery" aria-hidden="true">
+                    <div class="frame f1"><img src="assets/painting-cockatoo.jpg" alt=""></div>
+                    <div class="frame f2"><img src="assets/painting-flowers.jpg" alt=""></div>
+                    <div class="frame f3"><img src="assets/painting-rose.jpg" alt=""></div>
+                </div>
+                <div class="head"><span class="tag">Art / 08</span></div>
+                <div class="body">
+                    <h2 class="name">Mike McHugh Paintings and Commissions</h2>
+                    <p class="url">mchugh.com.au</p>
+                </div>
             </a>
-            <a href="https://mchugh.space">
-                <div class="label">mchugh.space</div>
-                <div class="desc">Redirects to Moon Rise &amp; Set</div>
+
+            <!-- 7. Game (1×1) -->
+            <a class="card c-game" href="https://game.mchugh.au">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Markets / 07</span></div>
+                <div class="body">
+                    <h2 class="name">Fantasy Stock Market Game</h2>
+                    <p class="url">game.mchugh.au</p>
+                </div>
             </a>
-            <a href="https://mchugh.com.au">
-                <div class="label">mchugh.com.au</div>
-                <div class="desc">mchugh.com.au</div>
+
+            <!-- 11. Catoggio (1×1, photo) -->
+            <a class="card c-cat" href="https://catoggio.net">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Estate / 11</span></div>
+                <div class="body">
+                    <h2 class="name">Catoggio Homes</h2>
+                    <p class="url">catoggio.net</p>
+                </div>
             </a>
-            <a href="https://catoggio.net">
-                <div class="label">catoggio.net</div>
-                <div class="desc">catoggio.net</div>
+
+            <!-- 6. WtW (2×1) -->
+            <a class="card c-wtw" href="https://wtw.mchugh.au/">
+                <div class="text">
+                    <span class="tag">Cinema / 06</span>
+                    <div class="body">
+                        <h2 class="name">What to Watch</h2>
+                        <p class="url">wtw.mchugh.au</p>
+                    </div>
+                </div>
+                <div class="posters" aria-hidden="true">
+                    <img src="assets/poster-1.jpg" alt="">
+                    <img src="assets/poster-2.jpg" alt="">
+                    <img src="assets/poster-3.jpg" alt="">
+                    <img src="assets/poster-4.jpg" alt="">
+                    <img src="assets/poster-5.jpg" alt="">
+                </div>
+            </a>
+
+            <!-- 10. SoA (4-wide banner) -->
+            <a class="card c-soa" href="https://soa.mchugh.au">
+                <div class="body">
+                    <span class="tag">Finance / 10</span>
+                    <h2 class="name">Statement of Advice Generator</h2>
+                    <p class="url">soa.mchugh.au</p>
+                </div>
+                <div class="doc-illus" aria-hidden="true">
+                    <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+                        <!-- page -->
+                        <rect x="6" y="2" width="80" height="100" fill="#fff" stroke="#cbc8b8" stroke-width="0.8"/>
+                        <!-- corner fold -->
+                        <polygon points="76,2 86,2 86,12" fill="#ece4d2" stroke="#cbc8b8" stroke-width="0.8"/>
+                        <!-- title -->
+                        <rect x="12" y="10" width="40" height="3" fill="#1a1612"/>
+                        <rect x="12" y="16" width="24" height="2" fill="#7a8090"/>
+                        <!-- body lines -->
+                        <rect x="12" y="24" width="68" height="1.5" fill="#cbc8b8"/>
+                        <rect x="12" y="29" width="68" height="1.5" fill="#cbc8b8"/>
+                        <rect x="12" y="34" width="50" height="1.5" fill="#cbc8b8"/>
+                        <!-- mini chart -->
+                        <g transform="translate(12, 44)">
+                            <rect x="0"  y="14" width="5" height="6" fill="#3a4452"/>
+                            <rect x="8"  y="10" width="5" height="10" fill="#3a4452"/>
+                            <rect x="16" y="6"  width="5" height="14" fill="#3a4452"/>
+                            <rect x="24" y="2"  width="5" height="18" fill="#3a4452"/>
+                            <rect x="32" y="8"  width="5" height="12" fill="#3a4452"/>
+                            <line x1="0" y1="20" x2="40" y2="20" stroke="#cbc8b8" stroke-width="0.5"/>
+                        </g>
+                        <!-- more body lines -->
+                        <rect x="12" y="74" width="68" height="1.5" fill="#cbc8b8"/>
+                        <rect x="12" y="79" width="68" height="1.5" fill="#cbc8b8"/>
+                        <rect x="12" y="84" width="44" height="1.5" fill="#cbc8b8"/>
+                        <!-- signature line -->
+                        <line x1="12" y1="94" x2="50" y2="94" stroke="#1a1612" stroke-width="0.7"/>
+                        <path d="M14 92 Q20 88 24 92 Q28 96 34 91 Q40 88 46 92" fill="none" stroke="#1a1612" stroke-width="0.7"/>
+                    </svg>
+                </div>
+                <span class="arrow" aria-hidden="true">→</span>
+            </a>
+
+            <!-- 12. Primordial Egypt (1×1) -->
+            <a class="card c-egypt" href="https://deepspaceplace.com/egypt">
+                <div class="photo-bg" aria-hidden="true"></div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Travel / 12</span></div>
+                <div class="body">
+                    <h2 class="name">My Primordial Egypt trip</h2>
+                    <p class="url">deepspaceplace.com/egypt</p>
+                </div>
+            </a>
+
+            <!-- 13. ClearSky (1×1) -->
+            <a class="card c-sky" href="https://clearsky.mchugh.au">
+                <div class="illus" aria-hidden="true">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                        <!-- stars -->
+                        <g fill="#eaf4fb">
+                            <circle cx="28" cy="30" r="0.8" opacity="0.85"/>
+                            <circle cx="72" cy="20" r="0.6" opacity="0.7"/>
+                            <circle cx="118" cy="38" r="0.9" opacity="0.9"/>
+                            <circle cx="170" cy="26" r="0.7" opacity="0.75"/>
+                            <circle cx="46" cy="60" r="0.5" opacity="0.6"/>
+                            <circle cx="150" cy="70" r="0.7" opacity="0.8"/>
+                            <circle cx="94" cy="52" r="0.6" opacity="0.7"/>
+                        </g>
+                        <!-- sun / clear horizon -->
+                        <g class="sky-sun">
+                            <circle cx="150" cy="96" r="26" fill="#ffe6a8" opacity="0.95"/>
+                            <circle cx="150" cy="96" r="26" fill="url(#skyGlow)"/>
+                        </g>
+                        <defs>
+                            <radialGradient id="skyGlow" cx="0.5" cy="0.5" r="0.5">
+                                <stop offset="60%" stop-color="rgba(255,230,168,0)"/>
+                                <stop offset="100%" stop-color="rgba(42,123,160,0.35)"/>
+                            </radialGradient>
+                        </defs>
+                        <!-- hills silhouette -->
+                        <g fill="#061024">
+                            <path d="M0 168 Q40 140 90 158 Q140 176 200 150 L200 200 L0 200 Z"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Weather / 13</span></div>
+                <div class="body">
+                    <h2 class="name">ClearSky Astronomy Forecast</h2>
+                    <p class="url">clearsky.mchugh.au</p>
+                </div>
             </a>
         </div>
+
+        <footer class="footer">
+            <span>James McHugh</span>
+            <span class="ornament">— made things —</span>
+            <span>MMXXVI</span>
+        </footer>
     </div>
 </body>
 </html>

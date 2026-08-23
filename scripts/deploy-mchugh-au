@@ -1,0 +1,39 @@
+#!/bin/bash
+set -euo pipefail
+
+# Installs the mchugh.au static site into the web root. Run as root via the
+# NOPASSWD sudoers rule in /etc/sudoers.d/mchugh-au; GitHub Actions scps the
+# bundle to $STAGING first.
+
+WEB_ROOT="/var/www/mchugh.au"
+STAGING="${1:-/tmp/mchugh-au-deploy}"
+
+# Self-update: if the bundle carries a newer copy of this script, install and re-exec
+BUNDLE_SCRIPT="$STAGING/scripts/deploy-mchugh-au"
+if [ -f "$BUNDLE_SCRIPT" ] && ! diff -q /usr/local/bin/deploy-mchugh-au "$BUNDLE_SCRIPT" > /dev/null 2>&1; then
+    echo "[deploy] Updating deploy script from bundle..."
+    install -m 755 "$BUNDLE_SCRIPT" /usr/local/bin/deploy-mchugh-au
+    exec /usr/local/bin/deploy-mchugh-au "$@"
+fi
+
+echo "[deploy] Deploying mchugh.au..."
+
+if [ ! -f "$STAGING/index.html" ]; then
+    echo "[deploy] ERROR: $STAGING/index.html missing — bad bundle, refusing to deploy."
+    exit 1
+fi
+
+mkdir -p "$WEB_ROOT"
+
+# Overlay: add and overwrite, never delete. scripts/ is excluded so the deploy
+# script is never web-served out of the document root.
+find "$STAGING" -mindepth 1 -maxdepth 1 ! -name scripts -exec cp -r {} "$WEB_ROOT/" \;
+
+chown -R www-data:www-data "$WEB_ROOT"
+
+echo "[deploy] Verifying..."
+[ -s "$WEB_ROOT/index.html" ] || { echo "[deploy] ERROR: index.html did not land."; exit 1; }
+
+rm -rf "$STAGING"
+
+echo "[deploy] Done — mchugh.au updated ($(find "$WEB_ROOT" -type f | wc -l) files)."

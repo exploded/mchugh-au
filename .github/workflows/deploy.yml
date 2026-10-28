@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || '22' }}
-          source: "index.html,assets/,favicon.ico,favicon-16x16.png,favicon-32x32.png,favicon-48x48.png,apple-touch-icon.png,android-chrome-192x192.png,android-chrome-512x512.png,scripts/deploy-mchugh-au"
+          source: "index.html,sitemap.xml,robots.txt,assets/,favicon.ico,favicon-16x16.png,favicon-32x32.png,favicon-48x48.png,apple-touch-icon.png,android-chrome-192x192.png,android-chrome-512x512.png,scripts/deploy-mchugh-au"
           target: "/tmp/mchugh-au-deploy"
           overwrite: true
 

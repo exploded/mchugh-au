@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Lists the public *.mchugh.au apps too. Google accepts the other hosts
+     because the whole domain is verified in Search Console (sc-domain:mchugh.au).
+     Leave out apps that redirect to a login page or disallow crawling. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://mchugh.au/</loc>
+        <lastmod>2026-10-28</lastmod>
+    </url>
+    <url><loc>https://spending.mchugh.au/</loc></url>
+    <url><loc>https://moon.mchugh.au/</loc></url>
+    <url><loc>https://speakeasy.mchugh.au/</loc></url>
+    <url><loc>https://spiro.mchugh.au/</loc></url>
+    <url><loc>https://wtw.mchugh.au/</loc></url>
+    <url><loc>https://clearsky.mchugh.au/</loc></url>
+</urlset>

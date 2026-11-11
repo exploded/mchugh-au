@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@500&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@500&family=Noto+Naskh+Arabic:wght@500&family=Tomorrow:ital,wght@1,900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -910,6 +910,62 @@
         .c-spend .tag { color: #8cb4ec; }
         .c-spend .url { color: rgba(236, 235, 231, 0.55); }
 
+        /* -- Card 21: Ion Drift (4-wide banner, anti-gravity track) */
+        .c-ion {
+            grid-column: span 4;
+            background: #04060a;
+            color: #f3f6f9;
+            min-height: 220px;
+            overflow: hidden;
+        }
+        .c-ion .illus {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .c-ion .illus svg { width: 100%; height: 100%; display: block; }
+        .c-ion .photo-overlay {
+            background: linear-gradient(90deg,
+                rgba(4, 6, 10, 0.96) 0%,
+                rgba(4, 6, 10, 0.75) 32%,
+                rgba(4, 6, 10, 0) 58%);
+        }
+        .c-ion .craft {
+            transition: transform 0.6s cubic-bezier(.2,.7,.2,1);
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .c-ion:hover .craft { transform: translateY(-6px) scale(0.92); }
+        .c-ion .streaks { opacity: 0.35; transition: opacity 0.5s ease; }
+        .c-ion:hover .streaks { opacity: 0.9; }
+        .c-ion:hover .lane,
+        .c-ion:hover .streaks line { animation: ion-rush 0.5s linear infinite; }
+        @keyframes ion-rush { to { stroke-dashoffset: -40; } }
+        .c-ion .name {
+            font-family: 'Tomorrow', 'Bahnschrift', 'Arial Narrow', sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            font-variation-settings: normal;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            line-height: 0.9;
+            font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+            color: #ffd400;
+        }
+        .c-ion .desc {
+            font-size: 0.78rem;
+            color: rgba(243, 246, 249, 0.8);
+        }
+        .c-ion .tag { color: #2ee6ff; }
+        .c-ion .tag i {
+            font-family: 'Noto Sans SC', 'Yu Gothic UI', 'Hiragino Sans', sans-serif;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            margin-left: 0.6em;
+            opacity: 0.7;
+        }
+        .c-ion .url { color: rgba(243, 246, 249, 0.55); }
+
         /* Footer */
         .footer {
             display: flex;
@@ -938,7 +994,7 @@
             .c-astro { grid-column: span 2; grid-row: span 2; }
             .c-train, .c-moon, .c-collim { grid-column: span 1; grid-row: span 2; }
             .c-estate, .c-wtw { grid-column: span 2; grid-row: span 1; }
-            .c-soa, .c-egypt, .c-llm, .c-local, .c-skyq, .c-spend { grid-column: span 2; }
+            .c-soa, .c-egypt, .c-llm, .c-local, .c-skyq, .c-spend, .c-ion { grid-column: span 2; }
         }
 
         /* Mobile */
@@ -946,7 +1002,7 @@
             .grid { grid-template-columns: 1fr; }
             .card,
             .c-astro, .c-train, .c-moon, .c-collim,
-            .c-estate, .c-wtw, .c-soa, .c-llm, .c-local, .c-skyq, .c-spend {
+            .c-estate, .c-wtw, .c-soa, .c-llm, .c-local, .c-skyq, .c-spend, .c-ion {
                 grid-column: span 1 !important;
                 grid-row: span 1 !important;
                 min-height: 200px;
@@ -969,6 +1025,15 @@
             }
             .c-local .illus, .c-skyq .chart, .c-spend .chart { padding: 0 1.2rem 1.2rem; justify-content: flex-end; }
             .c-spend .chart svg { width: 100%; }
+            /* Ion Drift: text on top, track below, craft kept in view */
+            .c-ion { min-height: 300px !important; justify-content: flex-start; gap: 0.6rem; }
+            .c-ion .illus { top: auto; height: 60%; left: auto; right: -15%; width: 115%; }
+            .c-ion .photo-overlay {
+                background: linear-gradient(180deg,
+                    rgba(4, 6, 10, 0.96) 0%,
+                    rgba(4, 6, 10, 0.8) 38%,
+                    rgba(4, 6, 10, 0) 58%);
+            }
             .c-soa {
                 grid-template-columns: 1fr;
                 gap: 0.6rem;
@@ -990,7 +1055,7 @@
 
         <section class="hero">
             <h1>Things <em>made</em>, kept here so they don't drift apart.</h1>
-            <p class="lede">Twenty side projects and quiet experiments.</p>
+            <p class="lede">Twenty-one side projects and quiet experiments.</p>
         </section>
 
         <div class="grid">
@@ -1292,6 +1357,66 @@
                 <div class="body">
                     <h2 class="name">ClearSky Astronomy Forecast</h2>
                     <p class="url">clearsky.mchugh.au</p>
+                </div>
+            </a>
+
+            <!-- 21. Ion Drift (4-wide banner) — mid-page so it doesn't stack on the Spending banner -->
+            <a class="card c-ion" href="https://iondrift.mchugh.au/">
+                <div class="illus" aria-hidden="true">
+                    <svg viewBox="0 0 1200 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid slice">
+                        <defs>
+                            <radialGradient id="ionGlow" cx="0.5" cy="0.5" r="0.5">
+                                <stop offset="0%" stop-color="rgba(46, 230, 255, 0.45)"/>
+                                <stop offset="100%" stop-color="rgba(46, 230, 255, 0)"/>
+                            </radialGradient>
+                            <linearGradient id="ionTrack" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#0a0f18"/>
+                                <stop offset="100%" stop-color="#141b28"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- horizon glow and skyline -->
+                        <ellipse cx="840" cy="70" rx="260" ry="60" fill="url(#ionGlow)"/>
+                        <path d="M560 70 L600 58 L630 64 L660 48 L690 60 L740 52 L780 66 L900 66 L930 50 L960 60 L1000 44 L1040 58 L1090 54 L1140 64 L1200 60 L1200 70 Z" fill="#0b111b"/>
+                        <line x1="520" y1="70" x2="1200" y2="70" stroke="rgba(46, 230, 255, 0.35)" stroke-width="1"/>
+                        <!-- track -->
+                        <polygon points="826,70 854,70 1190,220 490,220" fill="url(#ionTrack)"/>
+                        <line x1="826" y1="70" x2="490" y2="220" stroke="#ffd400" stroke-width="3"/>
+                        <line x1="854" y1="70" x2="1190" y2="220" stroke="#ffd400" stroke-width="3"/>
+                        <line class="lane" x1="840" y1="70" x2="840" y2="220" stroke="rgba(243, 246, 249, 0.5)" stroke-width="2" stroke-dasharray="14 26"/>
+                        <!-- hard-slant barrier blocks on the outside of each rail -->
+                        <g fill="#ff2d55" opacity="0.85">
+                            <polygon points="700,126 712,126 694,138 682,138"/>
+                            <polygon points="640,153 654,153 632,167 618,167"/>
+                            <polygon points="572,184 588,184 562,200 546,200"/>
+                            <polygon points="980,126 992,126 1010,138 998,138"/>
+                            <polygon points="1040,153 1054,153 1076,167 1062,167"/>
+                            <polygon points="1108,184 1124,184 1150,200 1134,200"/>
+                        </g>
+                        <!-- speed streaks radiating from the vanishing point -->
+                        <g class="streaks" stroke="#2ee6ff" stroke-width="1.5" stroke-dasharray="30 10" fill="none">
+                            <line x1="780" y1="84" x2="560" y2="140"/>
+                            <line x1="760" y1="76" x2="480" y2="100"/>
+                            <line x1="900" y1="84" x2="1130" y2="140"/>
+                            <line x1="920" y1="76" x2="1200" y2="98"/>
+                        </g>
+                        <!-- craft, rear view, hovering over its shadow -->
+                        <ellipse cx="840" cy="206" rx="58" ry="5" fill="rgba(46, 230, 255, 0.25)"/>
+                        <g class="craft">
+                            <polygon points="772,182 806,160 874,160 908,182 892,192 788,192" fill="#ffd400"/>
+                            <polygon points="818,166 862,166 854,154 826,154" fill="#04060a"/>
+                            <polygon points="772,182 788,192 760,194" fill="#f3f6f9"/>
+                            <polygon points="908,182 892,192 920,194" fill="#f3f6f9"/>
+                            <rect x="802" y="186" width="20" height="5" rx="2" fill="#2ee6ff"/>
+                            <rect x="858" y="186" width="20" height="5" rx="2" fill="#2ee6ff"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="photo-overlay" aria-hidden="true"></div>
+                <div class="head"><span class="tag">Games / 21<i>レース</i></span></div>
+                <div class="body">
+                    <h2 class="name">Ion Drift</h2>
+                    <p class="desc">Anti-gravity racing in the browser</p>
+                    <p class="url">iondrift.mchugh.au</p>
                 </div>
             </a>
 

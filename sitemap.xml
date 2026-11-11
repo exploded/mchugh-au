@@ -5,8 +5,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://mchugh.au/</loc>
-        <lastmod>2026-10-28</lastmod>
+        <lastmod>2026-11-11</lastmod>
     </url>
+    <url><loc>https://iondrift.mchugh.au/</loc></url>
     <url><loc>https://spending.mchugh.au/</loc></url>
     <url><loc>https://moon.mchugh.au/</loc></url>
     <url><loc>https://speakeasy.mchugh.au/</loc></url>
